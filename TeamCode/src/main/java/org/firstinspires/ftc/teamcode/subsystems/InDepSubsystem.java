@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.Arrays;
 
+@Config
 public class InDepSubsystem extends SubsystemBase {
     private final Motor leftArm;
     private final Motor rightArm;
@@ -61,10 +63,10 @@ public class InDepSubsystem extends SubsystemBase {
     public enum EndEffector {
         LEFT_CLAW_OPEN(0.8),
         LEFT_CLAW_CLOSED(0.55),
-        RIGHT_CLAW_OPEN(0.0),
-        RIGHT_CLAW_CLOSED(0.25),
+        RIGHT_CLAW_OPEN(0.17),
+        RIGHT_CLAW_CLOSED(0.4),
         ELBOW_REST(0.763),
-        ELBOW_FLIPPED(0.262);
+        ELBOW_FLIPPED(0.155);
         public final double servoPosition;
 
         EndEffector(double servoPosition) {
@@ -91,6 +93,8 @@ public class InDepSubsystem extends SubsystemBase {
         this.opMode = opMode;
         this.telemetry = telemetry;
         this.delta = 0;
+
+        close();
     }
 
     /**
@@ -126,7 +130,7 @@ public class InDepSubsystem extends SubsystemBase {
         // set bounds
         boolean underRange = armPos < delta && power < 0;
         boolean overRange = armPos > 2400 + delta && power > 0;
-        if (underRange || overRange) {
+        if ((underRange || overRange) && !opMode.gamepad1.x) {
             leftArm.motor.setPower(0);
             rightArm.motor.setPower(0);
         } else {
@@ -227,14 +231,18 @@ public class InDepSubsystem extends SubsystemBase {
      */
     private double calculateElbowPosition(double armPos) {
         double lowerBound = Level.BACKBOARD_HIGH.target-50;
-        double m_elbow = (EndEffector.ELBOW_FLIPPED.servoPosition - EndEffector.ELBOW_REST.servoPosition) / ((double)Level.BACKBOARD_HIGH.target - lowerBound);
+
+        double eRest = EndEffector.ELBOW_REST.servoPosition;
+        double eFlipped = EndEffector.ELBOW_FLIPPED.servoPosition;
+
+        double m_elbow = (eFlipped - eRest) / ((double)Level.BACKBOARD_HIGH.target - lowerBound);
 
         if (armPos <= lowerBound)
-            return EndEffector.ELBOW_REST.servoPosition;
+            return eRest;
         else if (armPos <= (double)Level.BACKBOARD_HIGH.target)
-            return m_elbow*armPos - m_elbow*500 + EndEffector.ELBOW_REST.servoPosition;
+            return m_elbow*armPos - m_elbow*500 + eRest;
         else
-            return EndEffector.ELBOW_FLIPPED.servoPosition;
+            return eFlipped;
     }
 
     /**

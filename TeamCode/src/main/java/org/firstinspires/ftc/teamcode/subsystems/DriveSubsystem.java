@@ -32,6 +32,7 @@ public class DriveSubsystem extends SubsystemBase {
     private Telemetry telemetry;
 
     private double imuResetValue;
+    private final double imuOffset = 180; // degrees
 
     public DriveSubsystem(Motor leftFront, Motor rightFront, Motor leftBack, Motor rightBack, AdafruitBNO055IMU imu, LinearOpMode opMode, Telemetry telemetry) {
         this.rightBack = rightBack;
@@ -126,7 +127,7 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     public double getYaw() {
-        return normalizeAngle(imu.getAngularOrientation().firstAngle * 180.0 / Math.PI - imuResetValue);
+        return normalizeAngle(imu.getAngularOrientation().firstAngle * 180.0 / Math.PI - imuResetValue + imuOffset);
     }
 
     /**
