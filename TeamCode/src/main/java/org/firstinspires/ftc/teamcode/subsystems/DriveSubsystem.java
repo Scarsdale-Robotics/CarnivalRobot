@@ -76,6 +76,8 @@ public class DriveSubsystem extends SubsystemBase {
      */
     public void driveFieldCentric(double right, double forward, double turn) {
         double yaw = getYaw();
+        telemetry.addData("imu yaw", yaw);
+        telemetry.update();
         controller.driveFieldCentric(right, forward, turn, yaw);
     }
 

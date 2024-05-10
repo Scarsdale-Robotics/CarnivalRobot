@@ -39,10 +39,10 @@ public class HardwareRobot {
         leftBack.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBack.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFront.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBack.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBack.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBack.motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         leftFront.setRunMode(Motor.RunMode.RawPower);
         rightFront.setRunMode(Motor.RunMode.RawPower);

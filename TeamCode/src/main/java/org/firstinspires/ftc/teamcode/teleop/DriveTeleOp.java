@@ -40,6 +40,11 @@ public class DriveTeleOp extends LinearOpMode {
                 y = gamepad1.left_stick_y;
             if (Math.abs(gamepad1.right_stick_x) > 0.05)
                 turn = gamepad1.right_stick_x;
+
+            telemetry.addData("x", x);
+            telemetry.addData("y", y);
+            telemetry.addData("turn", turn);
+
             drive.driveFieldCentric(drive_speed * x, drive_speed * y, drive_speed * turn);
 
             ////////////////////
